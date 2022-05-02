@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package contacttools;
 
 import java.io.File;
@@ -10,12 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- *
- * @author vasil
- */
 public class AppGlobalSettings {
-    
+
     public static int numberOfColumns;
     public static String[] columnHeaders;
     public static String mySQLServerURL;
@@ -34,7 +25,7 @@ public class AppGlobalSettings {
     public static char excelCSVEol2;
     public static char csvSeparator;
     public static char csvEol;
-    
+
     AppGlobalSettings(){
         numberOfColumns = 17;
         columnHeaders= new String[17];
@@ -53,7 +44,7 @@ public class AppGlobalSettings {
         columnHeaders[12] = "email";
         columnHeaders[13] = "businessfax";
         columnHeaders[14] = "mobilephone";
-        columnHeaders[15] = "categories"; 
+        columnHeaders[15] = "categories";
         columnHeaders[16] = "opnid";
         mySQLServerURL = "jdbc:mysql://192.168.1.54:3306/partner_contact_list?useSSL=false";
         mySQLServerTable = "partner_mailing_list";
@@ -72,31 +63,31 @@ public class AppGlobalSettings {
         csvSeparator = ',';
         csvEol = 0x0A;
     }
-    
+
     void ReadFromCNFfile() {
-        
+
         char chars[];
         String fileContent;
         // Old style of str[] definition
         // String str[] = null;
         ArrayList<String> str = new ArrayList<>();
-        
+
         boolean iStrEqualitySign = false;
         int iStrEqualitySignPosition = 0;
-        
+
         File file = new File("appsettings.cfg");
-                        
+
         try (FileReader fr = new FileReader(file)) {
             chars = new char[(int) file.length()];
             fr.read(chars);
             fr.close();
-            
+
             // delete spaces, tabs, eols, etc.
-            
+
             fileContent = new String(chars);
-            
+
             int startPosition = 0;
-            
+
             for(int k = 0; k < fileContent.length(); k++) {
                 if(fileContent.charAt(k) == '\n'){
                     str.add((fileContent.substring(startPosition, k-1)).trim());
@@ -105,25 +96,25 @@ public class AppGlobalSettings {
             }
             str.add((fileContent.substring(startPosition)).trim());
         }
-	catch (IOException e) {
+        catch (IOException e) {
             e.printStackTrace();
-        }        
-        
+        }
+
         // Parse the rows and read the application settings
-        
+
         int iStr = 0;
-        
+
         while(iStr < str.size()) {
             if(str.get(iStr).charAt(0) == ';') {
                 iStr++;
                 continue;
             }
-            
+
             if(str.get(iStr).equals("")){
                 iStr++;
                 continue;
             }
-            
+
             // Looking for '=' sign
             for(int i = 0; i < str.get(iStr).length(); i++) {
                 if(str.get(iStr).charAt(i) == '=') {
@@ -132,13 +123,13 @@ public class AppGlobalSettings {
                     break;
                 }
             }
-            
+
             if(!iStrEqualitySign){
-                System.out.println("Error: There is no \"=\" sign in confoguration file string \n\"" + str.get(iStr) + "\", row #" + iStr);
+                System.out.println("Error: There is no \"=\" sign in configuration file string \n\"" + str.get(iStr) + "\", row #" + iStr);
                 return;
             } else
                 iStrEqualitySign = false;
-            
+
             String str2 = str.get(iStr).substring(0, iStrEqualitySignPosition-1);
             str2 = str2.stripTrailing();
             switch (str2) {
@@ -152,10 +143,10 @@ public class AppGlobalSettings {
                     }
                     iStr++;
                     break;
-                case "column_headers": 
+                case "column_headers":
                     // Number of strings in the headers data
                     int jStr = 0;
-                    boolean openingCurlyBracketFound = false, 
+                    boolean openingCurlyBracketFound = false,
                             closingCurlyBracketFound = false;
                     // Looking for opening '{'
                     for(int j = 0; j < str.get(iStr).length(); j++) {
@@ -181,16 +172,16 @@ public class AppGlobalSettings {
                             }
                         }
                     }
-                          
+
                     if(!closingCurlyBracketFound) {
                         System.out.println("Error in column_headers definition statement in row #" + iStr + " or below");
                         return;
                     }
                     // Concatenate all rows in one, delete all spaces and parse it
                     String headersStr = "";
-                    for(int k = iStr; k <= jStr; k++) 
+                    for(int k = iStr; k <= jStr; k++)
                         headersStr += str.get(k);
-                    
+
                     headersStr = headersStr.replaceAll("\\s+","");
                     int[] commasPositionArray = new int[numberOfColumns-1];
                     int j = 0;
@@ -203,12 +194,12 @@ public class AppGlobalSettings {
                         System.out.println("Error in column_headers definition statement in row #" + iStr + "or below");
                         return;
                     }
-                            
+
                     AppGlobalSettings.columnHeaders[0] = headersStr.substring(0, commasPositionArray[0]);
                     for(int k = 1; k < (numberOfColumns-1); k++){
                         AppGlobalSettings.columnHeaders[k] = headersStr.substring(commasPositionArray[k-1]+1, commasPositionArray[k]);
                     }
-                    
+
                     iStr = jStr+1;
                     break;
                 case "mysql_server_url":
