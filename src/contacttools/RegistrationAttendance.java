@@ -202,7 +202,7 @@ public class RegistrationAttendance extends ContactItem {
         raIA.remove(0);
 
         // Copy all Registration and Attendance info in the array and return it
-        if(raIA.size() > 0) {
+        if(!raIA.isEmpty()) {
             RegistrationAttendance[] raInputArray = new RegistrationAttendance[raIA.size()];
             raIA.toArray(raInputArray);
             return raInputArray;

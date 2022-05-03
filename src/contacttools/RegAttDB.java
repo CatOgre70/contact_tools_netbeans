@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class RegAttDB {
     private static String headers[] = { "attendance_id", "fk_event_id",
             "fk_id", "registration_status", "attendance_status" };
-    private int regAttDB[];
+    private final int regAttDB[];
 
     RegAttDB(){
         this.regAttDB = new int[5];
@@ -87,8 +87,8 @@ public class RegAttDB {
 
         // Open mySQL Connection and read Items
         try (Connection connection = DriverManager
-                .getConnection(globalSettings.mySQLServerURL, globalSettings.mySQLServerUser,
-                        globalSettings.mySQLServerPassword);
+                .getConnection(AppGlobalSettings.mySQLServerURL, AppGlobalSettings.mySQLServerUser,
+                        AppGlobalSettings.mySQLServerPassword);
 
              // Step 2:Create a statement using connection object
              Statement stmt = connection.createStatement();
@@ -115,7 +115,7 @@ public class RegAttDB {
 
     }
 
-    public static void writeRADBToMySQL(RegAttDB[] raInDB, AppGlobalSettings globalSettings){
+    public static void writeRADBToMySQL(RegAttDB[] raInDB){
         if(raInDB == null){
             System.out.println("There aren\'t new registration data in the input file. Nothing to do");
             return;
@@ -136,16 +136,17 @@ public class RegAttDB {
         try {
             // Create MySQL database connection
             Connection conn = DriverManager
-                    .getConnection(globalSettings.mySQLServerURL,
-                            globalSettings.mySQLServerUser,
-                            globalSettings.mySQLServerPassword);
+                    .getConnection(AppGlobalSettings.mySQLServerURL,
+                            AppGlobalSettings.mySQLServerUser,
+                            AppGlobalSettings.mySQLServerPassword);
 
 
-            for(int k = 0; k < raInDB.length; k++){
+            for (RegAttDB raInDB1 : raInDB) {
                 // create the mysql insert preparedstatement
                 PreparedStatement preparedStmt = conn.prepareStatement(QUERY);
-                for(int i = 0; i < 5; i++)
-                    preparedStmt.setInt(i+1,raInDB[k].getValueByIndex(i));
+                for (int i = 0; i < 5; i++) {
+                    preparedStmt.setInt(i+1, raInDB1.getValueByIndex(i));
+                }
                 // execute the preparedstatement
                 preparedStmt.execute();
             }
@@ -157,7 +158,7 @@ public class RegAttDB {
         }
     }
 
-    public static void updateRADBToMySQL(RegAttDB[] raUpdDB, AppGlobalSettings globalSettings){
+    public static void updateRADBToMySQL(RegAttDB[] raUpdDB){
         if(raUpdDB == null){
             System.out.println("There aren\'t changed registration data in the input file. Nothing to do");
             return;
@@ -175,17 +176,18 @@ public class RegAttDB {
         try {
             // Create MySQL database connection
             Connection conn = DriverManager
-                    .getConnection(globalSettings.mySQLServerURL,
-                            globalSettings.mySQLServerUser,
-                            globalSettings.mySQLServerPassword);
+                    .getConnection(AppGlobalSettings.mySQLServerURL,
+                            AppGlobalSettings.mySQLServerUser,
+                            AppGlobalSettings.mySQLServerPassword);
 
 
-            for(int k = 0; k < raUpdDB.length; k++){
+            for (RegAttDB raUpdDB1 : raUpdDB) {
                 // create the mysql insert preparedstatement
                 PreparedStatement preparedStmt = conn.prepareStatement(QUERY);
-                for(int i = 0; i < 5; i++)
-                    preparedStmt.setInt(i+1,raUpdDB[k].getValueByIndex(i));
-                preparedStmt.setInt(6, raUpdDB[k].getValueByIndex(0));
+                for (int i = 0; i < 5; i++) {
+                    preparedStmt.setInt(i+1, raUpdDB1.getValueByIndex(i));
+                }
+                preparedStmt.setInt(6, raUpdDB1.getValueByIndex(0));
                 // execute the preparedstatement
                 preparedStmt.executeUpdate();
             }

@@ -133,7 +133,7 @@ public class AppGlobalSettings {
             String str2 = str.get(iStr).substring(0, iStrEqualitySignPosition-1);
             str2 = str2.stripTrailing();
             switch (str2) {
-                case "number_of_columns":
+                case "number_of_columns" -> {
                     str.set(iStr, (str.get(iStr).substring(iStrEqualitySignPosition+1)).strip());
                     try {
                         numberOfColumns = Integer.parseInt(str.get(iStr));
@@ -142,8 +142,8 @@ public class AppGlobalSettings {
                         return;
                     }
                     iStr++;
-                    break;
-                case "column_headers":
+                }
+                case "column_headers" -> {
                     // Number of strings in the headers data
                     int jStr = 0;
                     boolean openingCurlyBracketFound = false,
@@ -172,7 +172,6 @@ public class AppGlobalSettings {
                             }
                         }
                     }
-
                     if(!closingCurlyBracketFound) {
                         System.out.println("Error in column_headers definition statement in row #" + iStr + " or below");
                         return;
@@ -181,7 +180,6 @@ public class AppGlobalSettings {
                     String headersStr = "";
                     for(int k = iStr; k <= jStr; k++)
                         headersStr += str.get(k);
-
                     headersStr = headersStr.replaceAll("\\s+","");
                     int[] commasPositionArray = new int[numberOfColumns-1];
                     int j = 0;
@@ -194,65 +192,63 @@ public class AppGlobalSettings {
                         System.out.println("Error in column_headers definition statement in row #" + iStr + "or below");
                         return;
                     }
-
                     AppGlobalSettings.columnHeaders[0] = headersStr.substring(0, commasPositionArray[0]);
                     for(int k = 1; k < (numberOfColumns-1); k++){
                         AppGlobalSettings.columnHeaders[k] = headersStr.substring(commasPositionArray[k-1]+1, commasPositionArray[k]);
                     }
-
                     iStr = jStr+1;
-                    break;
-                case "mysql_server_url":
+                }
+                case "mysql_server_url" -> {
                     str.set(iStr, (str.get(iStr).substring(iStrEqualitySignPosition+1)).trim());
                     AppGlobalSettings.mySQLServerURL = str.get(iStr);
                     iStr++;
-                    break;
-                case "partner_mailing_list":
+                }
+                case "partner_mailing_list" -> {
                     str.set(iStr, (str.get(iStr).substring(iStrEqualitySignPosition+1)).trim());
                     AppGlobalSettings.mySQLServerTable = str.get(iStr);
                     iStr++;
-                    break;
-                case "attendees_list":
+                }
+                case "attendees_list" -> {
                     str.set(iStr, str.get(iStr).substring(1+iStrEqualitySignPosition).trim());
                     AppGlobalSettings.mySQLServerAttendeesList = str.get(iStr);
                     iStr++;
-                    break;
-                case "mysql_server_user":
+                }
+                case "mysql_server_user" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.mySQLServerUser = str.get(iStr);
                     iStr++;
-                    break;
-                case "mysql_server_password":
+                }
+                case "mysql_server_password" -> {
                     str.set(iStr,str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.mySQLServerPassword = str.get(iStr);
                     iStr++;
-                    break;
-                case "working_directory":
+                }
+                case "working_directory" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.workingDirectory = str.get(iStr);
                     iStr++;
-                    break;
-                case "input_file_1":
+                }
+                case "input_file_1" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.inputFile1 = str.get(iStr);
                     iStr++;
-                    break;
-                case "input_file_2":
+                }
+                case "input_file_2" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.inputFile2 = str.get(iStr);
                     iStr++;
-                    break;
-                case "output_file":
+                }
+                case "output_file" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.outputFile = str.get(iStr);
                     iStr++;
-                    break;
-                case "output_file_1":
+                }
+                case "output_file_1" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.outputFile1 = str.get(iStr);
                     iStr++;
-                    break;
-                case "is_excel_csv":
+                }
+                case "is_excel_csv" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     int isExcel;
                     try {
@@ -263,13 +259,13 @@ public class AppGlobalSettings {
                     }
                     AppGlobalSettings.isExcelCSV = isExcel == 1;
                     iStr++;
-                    break;
-                case "excel_csv_separator":
+                }
+                case "excel_csv_separator" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.excelCSVSeparator = str.get(iStr).charAt(0);
                     iStr++;
-                    break;
-                case "excel_csv_eol":
+                }
+                case "excel_csv_eol" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     int eCSVeol;
                     try {
@@ -280,9 +276,10 @@ public class AppGlobalSettings {
                     }
                     AppGlobalSettings.excelCSVEol = (char)eCSVeol;
                     iStr++;
-                    break;
-                case "excel_csv_eol1":
+                }
+                case "excel_csv_eol1" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
+                    int eCSVeol;
                     try {
                         eCSVeol = Integer.parseInt(str.get(iStr),16);
                     } catch (NumberFormatException e) {
@@ -291,14 +288,15 @@ public class AppGlobalSettings {
                     }
                     AppGlobalSettings.excelCSVEol = (char)eCSVeol;
                     iStr++;
-                    break;
-                case "csv_separator":
+                }
+                case "csv_separator" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
                     AppGlobalSettings.csvSeparator = str.get(iStr).charAt(0);
                     iStr++;
-                    break;
-                case "csv_eol":
+                }
+                case "csv_eol" -> {
                     str.set(iStr, str.get(iStr).substring(iStrEqualitySignPosition+1).trim());
+                    int eCSVeol;
                     try {
                         eCSVeol = Integer.parseInt(str.get(iStr),16);
                     } catch (NumberFormatException e) {
@@ -307,10 +305,11 @@ public class AppGlobalSettings {
                     }
                     AppGlobalSettings.csvEol = (char)eCSVeol;
                     iStr++;
-                    break;
-                default:
-                    System.out.println("Error: Wrong parameter in configuration file, setting " + str.get(iStr) + ", row #" + iStr);
-                    return;
+                }
+                default -> {
+                        System.out.println("Error: Wrong parameter in configuration file, setting " + str.get(iStr) + ", row #" + iStr);
+                        return;
+                }
             }
         }
     }

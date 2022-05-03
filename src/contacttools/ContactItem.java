@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class ContactItem {
 
-    private String[] headers;
+    private final String[] headers;
     private int id;
-    private String[] values;
+    private final String[] values;
 
     ContactItem(){
         int n = AppGlobalSettings.numberOfColumns;
@@ -313,13 +313,13 @@ public class ContactItem {
                             AppGlobalSettings.mySQLServerPassword);
 
 
-            for(int k = 0; k < ciArray.length; k++){
-
+            for(ContactItem ciArray1 : ciArray) {
                 // create the mysql insert preparedstatement
                 PreparedStatement preparedStmt = conn.prepareStatement(QUERY);
-                preparedStmt.setInt(1,ciArray[k].getId());
-                for(int m = 0; m < n - 1; m++)
-                    preparedStmt.setString(m+2,ciArray[k].getValueByIndex(m));
+                preparedStmt.setInt(1, ciArray1.getId());
+                for (int m = 0; m < n - 1; m++) {
+                    preparedStmt.setString(m+2, ciArray1.getValueByIndex(m));
+                }
                 // execute the preparedstatement
                 preparedStmt.execute();
             }
@@ -356,13 +356,14 @@ public class ContactItem {
                             AppGlobalSettings.mySQLServerPassword);
 
 
-            for(int k = 0; k < ciArray.length; k++){
+            for (ContactItem ciArray1 : ciArray) {
                 // create the mysql insert preparedstatement
                 PreparedStatement preparedStmt = conn.prepareStatement(QUERY2);
-                preparedStmt.setInt(1,ciArray[k].getId());
-                for(int i = 1; i < n; i++)
-                    preparedStmt.setString(i+1,ciArray[k].getValueByIndex(i-1));
-                preparedStmt.setInt(n+1, ciArray[k].getId());
+                preparedStmt.setInt(1, ciArray1.getId());
+                for (int i = 1; i < n; i++) {
+                    preparedStmt.setString(i+1, ciArray1.getValueByIndex(i-1));
+                }
+                preparedStmt.setInt(n+1, ciArray1.getId());
                 // execute the preparedstatement
                 preparedStmt.executeUpdate();
             }
@@ -374,23 +375,23 @@ public class ContactItem {
         }
     }
 
-    public static void deleteCIArrayFromDB(ContactItem[] ciArray, AppGlobalSettings globalSettings){
+    public static void deleteCIArrayFromDB(ContactItem[] ciArray){
         // Delete ContactsItems Array from the MySQL database
         if(ciArray == null){
             System.out.println("There aren\'t contacts to delete in the input file. Nothing to do");
             return;
         }
 
-        String QUERY3 = "delete from " + globalSettings.mySQLServerTable + " where id = ?";
+        String QUERY3 = "delete from " + AppGlobalSettings.mySQLServerTable + " where id = ?";
 
         System.out.println("QUERY3 = " + QUERY3);
 
         try {
             // Create MySQL database connection
             Connection conn = DriverManager
-                    .getConnection(globalSettings.mySQLServerURL,
-                            globalSettings.mySQLServerUser,
-                            globalSettings.mySQLServerPassword);
+                    .getConnection(AppGlobalSettings.mySQLServerURL,
+                            AppGlobalSettings.mySQLServerUser,
+                            AppGlobalSettings.mySQLServerPassword);
 
             for(int k = 0; k < ciArray.length; k++){
                 // create the mysql insert preparedstatement

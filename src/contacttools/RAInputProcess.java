@@ -124,7 +124,7 @@ public class RAInputProcess {
             }
         }
 
-        if(ciInArr.size() > 0){
+        if(!ciInArr.isEmpty()){
             ciInputArray = new ContactItem[ciInArr.size()];
             ciInArr.toArray(ciInputArray);
         }
@@ -226,13 +226,13 @@ public class RAInputProcess {
         }
 
         RegistrationAttendance[] raInputArray = null;
-        if(raInArr.size() != 0) {
+        if(!raInArr.isEmpty()) {
             raInputArray = new RegistrationAttendance[raInArr.size()];
             raInArr.toArray(raInputArray);
         }
 
         RegistrationAttendance[] raUpdateArray = null;
-        if(raUpdArr.size() != 0) {
+        if(!raUpdArr.isEmpty()) {
             raUpdateArray = new RegistrationAttendance[raUpdArr.size()];
             raUpdArr.toArray(raUpdateArray);
         }
@@ -281,7 +281,7 @@ public class RAInputProcess {
                 raInDB[i].setValueByIndex(3, raInputArray[i].getRegistration());
                 raInDB[i].setValueByIndex(4, raInputArray[i].getAttendance());
             }
-            RegAttDB.writeRADBToMySQL(raInDB, globalSettings);
+            RegAttDB.writeRADBToMySQL(raInDB);
         } else {
             System.out.println("There aren't new registration and attendance data in the input file. Nothing to do");
         }
@@ -297,7 +297,7 @@ public class RAInputProcess {
                 raUpdDB[i].setValueByIndex(3, raUpdateArray[i].getRegistration());
                 raUpdDB[i].setValueByIndex(4, raUpdateArray[i].getAttendance());
             }
-            RegAttDB.updateRADBToMySQL(raUpdDB, globalSettings);
+            RegAttDB.updateRADBToMySQL(raUpdDB);
         } else {
             System.out.println("There aren't updated registration and attendance data in the input file. Nothing to do");
         }

@@ -24,67 +24,60 @@ public class NameHandling {
         ArrayList<ContactItem> ciA = new ArrayList<>();
         boolean isFound = false;
 
-        for(int i = 0; i < ciArray.length; i++) {
-            if(ciArray[i].getValueByIndex(0).equals("")){
+        for (ContactItem ciArray1 : ciArray) {
+            if (ciArray1.getValueByIndex(0).equals("")) {
                 isFound = true;
-                String secondNameEng, firstNameEng, fullNameEng,
-                        secondNameRus = ciArray[i].getValueByIndex(3),
-                        nameAndMiddlename = ciArray[i].getValueByIndex(4);
-
+                String secondNameEng, firstNameEng, fullNameEng;
+                String secondNameRus = ciArray1.getValueByIndex(3);
+                String nameAndMiddlename = ciArray1.getValueByIndex(4);
                 StringBuilder secondNameEngSB = new StringBuilder();
-                for(int j = 0; j < secondNameRus.length(); j++) {
+                for (int j = 0; j < secondNameRus.length(); j++) {
                     int charCode = secondNameRus.charAt(j);
-                    if((charCode >= 0x0410) & (charCode <= 0x044F))
+                    if ((charCode >= 0x0410) & (charCode <= 0x044F)) {
                         secondNameEngSB.append(TransLitTable[charCode-0x0410]);
-                    else if(charCode == 0x0401) // Ё character
+                    } else if (charCode == 0x0401) {
                         secondNameEngSB.append("Yo");
-                    else if(charCode == 0x0451) // ё character
+                    } else if (charCode == 0x0451) {
                         secondNameEngSB.append("yo");
-                    else if(charCode == 32) // space character
-                        continue;
-                    else {
+                    } else if (charCode == 32) {
+                    } else {
                         System.out.println("Error: wrong letter " + (char)charCode + " code of "
                                 + charCode + " in the Russian second name of");
-                        ciArray[i].println();
+                        ciArray1.println();
                         return;
                     }
                 }
                 secondNameEng = secondNameEngSB.toString();
-
                 StringBuilder firstNameEngSB = new StringBuilder();
-                for(int j = 0; j < nameAndMiddlename.length(); j++) {
+                for (int j = 0; j < nameAndMiddlename.length(); j++) {
                     int charCode = nameAndMiddlename.charAt(j);
-                    if((charCode >= 0x0410) & (charCode <= 0x044F))
+                    if ((charCode >= 0x0410) & (charCode <= 0x044F)) {
                         firstNameEngSB.append(TransLitTable[charCode-0x0410]);
-                    else if(charCode == 0x0401) // Ё character
+                    } else if (charCode == 0x0401) {
                         firstNameEngSB.append("Yo");
-                    else if(charCode == 0x0451) // ё character
+                    } else if (charCode == 0x0451) {
                         firstNameEngSB.append("yo");
-                    else if(charCode == 32) // space character
-                        continue;
-                    else {
+                    } else if (charCode == 32) {
+                    } else {
                         System.out.println("Error: wrong letter " + (char)charCode + " code of "
                                 + charCode + " in the Russian first name of");
-                        ciArray[i].println();
+                        ciArray1.println();
                         return;
                     }
                 }
                 firstNameEng = firstNameEngSB.toString();
-
                 fullNameEng = firstNameEng + " " + secondNameEng;
-
                 ContactItem ci = new ContactItem();
-                ci.setId(ciArray[i].getId());
+                ci.setId(ciArray1.getId());
                 ci.setValueByIndex(0, secondNameEng);
                 ci.setValueByIndex(1, firstNameEng);
                 ci.setValueByIndex(2, fullNameEng);
-                for(int j = 3; j < AppGlobalSettings.numberOfColumns-1; j++)
-                    ci.setValueByIndex(j, ciArray[i].getValueByIndex(j));
-
+                for (int j = 3; j < AppGlobalSettings.numberOfColumns-1; j++) {
+                    ci.setValueByIndex(j, ciArray1.getValueByIndex(j));
+                }
                 // ci.println();
 
                 ciA.add(ci);
-
             }
         }
 

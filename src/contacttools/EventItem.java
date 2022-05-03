@@ -86,49 +86,67 @@ public class EventItem {
 
     String getEventDataByName(String s){
         switch (s) {
-            case "marketingCode":
+            case "marketingCode" -> {
                 return this.marketingCode;
-            case "eventName":
+            }
+            case "eventName" -> {
                 return this.eventName;
-            case "eventShortName":
+            }
+            case "eventShortName" -> {
                 return this.eventShortName;
-            case "eventRubric":
+            }
+            case "eventRubric" -> {
                 return this.eventRubric;
-            case "eventTopic":
+            }
+            case "eventTopic" -> {
                 return this.eventTopic;
-            case "eventType":
+            }
+            case "eventType" -> {
                 return this.eventType;
-            case "eventPlatform":
+            }
+            case "eventPlatform" -> {
                 return this.eventPlatform;
-            case "eventOwner":
+            }
+            case "eventOwner" -> {
                 return this.eventOwner;
-            default:
-                System.out.println("Error with function argument: such field don't exist in the EventItem Class");
-                return "";
+            }
+            default -> {
+                    System.out.println("Error with function argument: such field don't exist in the EventItem Class");
+                    return "";
+            }
         }
     }
 
     String getEventDataByIndex(int i){
         switch (i) {
-            case 1:
+            case 1 -> {
                 return this.marketingCode;
-            case 2:
+            }
+            case 2 -> {
                 return this.eventName;
-            case 3:
+            }
+            case 3 -> {
                 return this.eventShortName;
-            case 4:
+            }
+            case 4 -> {
                 return this.eventRubric;
-            case 5:
+            }
+            case 5 -> {
                 return this.eventTopic;
-            case 7:
+            }
+            case 7 -> {
                 return this.eventType;
-            case 8:
+            }
+            case 8 -> {
                 return this.eventPlatform;
-            case 9:
+            }
+            case 9 -> {
                 return this.eventOwner;
-            default:
-                System.out.println("Error with function argument: wrong index of the eventItem Class");
-                return "";
+            }
+            default -> {
+                    System.out.println("Error with function argument: wrong index of the eventItem Class");
+                    return "";
+            }
         }
     }
 

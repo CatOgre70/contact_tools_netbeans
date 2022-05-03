@@ -13,23 +13,23 @@ public class NormalizeEmailsAndDuplicatesRemovalFromDB {
         globalSettings.ReadFromCNFfile();
 
         ArrayList<ContactItem> ciA = new ArrayList<>();
-        ContactItem[] ciUpdateArray = null;
+        ContactItem[] ciUpdateArray;
 
         // Read existing partner contact data from MySQL database
         ContactItem[] ciArray = ContactItem.readCIArrayFromDB(globalSettings);
 
         // Normalize emails in the ciArray and put the normalized into ciUpdateArray
-        for(int i = 0; i < ciArray.length; i++){
-            String initialEmail = ciArray[i].getValueByHeader("email");
-            ciArray[i].normalizeEmail();
-            if(!initialEmail.equals(ciArray[i].getValueByHeader("email"))) {
+        for (ContactItem ciArray1 : ciArray) {
+            String initialEmail = ciArray1.getValueByHeader("email");
+            ciArray1.normalizeEmail();
+            if (!initialEmail.equals(ciArray1.getValueByHeader("email"))) {
                 ContactItem newCI = new ContactItem();
-                newCI.copy(ciArray[i]);
+                newCI.copy(ciArray1);
                 ciA.add(newCI);
             }
         }
 
-        if(ciA.size() > 0){
+        if(!ciA.isEmpty()){
             ciUpdateArray = new ContactItem[ciA.size()];
             ciA.toArray(ciUpdateArray);
             ContactItem.updateCIArrayToDB(ciUpdateArray);
@@ -45,8 +45,8 @@ public class NormalizeEmailsAndDuplicatesRemovalFromDB {
 
         // Open mySQL Connection and read Items
         try (Connection connection = DriverManager
-                .getConnection(globalSettings.mySQLServerURL, globalSettings.mySQLServerUser,
-                        globalSettings.mySQLServerPassword);
+                .getConnection(AppGlobalSettings.mySQLServerURL, AppGlobalSettings.mySQLServerUser,
+                        AppGlobalSettings.mySQLServerPassword);
         ){
 
             for(int i = 0; i < ciArray.length; i++){
@@ -61,19 +61,17 @@ public class NormalizeEmailsAndDuplicatesRemovalFromDB {
                         ciI.add(j);
                     }
                 }
-                if(ciA.size() > 0){
+                if(!ciA.isEmpty()){
                     isDublicatedFound = true;
                     ciUpdateArray = new ContactItem[ciA.size()];
                     ciA.toArray(ciUpdateArray);
 
                     // Prepare and change foreign keys in the RegAttDB
-                    for(int j = 0; j < ciUpdateArray.length; j++) {
+                    for (ContactItem ciUpdateArray1 : ciUpdateArray) {
                         // Array of Registration and Attendance Items
                         ArrayList<RegAttDB> raDBA = new ArrayList<>();
-
                         // Construct the query for MySQL
-                        String Query = "select * from attend_reg_status where fk_id = "
-                                + ciUpdateArray[j].getId();
+                        String Query = "select * from attend_reg_status where fk_id = " + ciUpdateArray1.getId();
                         // Create a statement using connection object
                         Statement stmt = connection.createStatement();
                         // Execute the query or update query
@@ -85,17 +83,15 @@ public class NormalizeEmailsAndDuplicatesRemovalFromDB {
                                 raDBItem.setValueByIndex(k, rs.getInt(RegAttDB.getHeaderByIndex(k)));
                             raDBA.add(raDBItem);
                         }
-
                         RegAttDB[] raUpdateDB = new RegAttDB[raDBA.size()];
                         raDBA.toArray(raUpdateDB);
-                        for(int k = 0; k < raUpdateDB.length; k++){
-                            raUpdateDB[k].setValueByIndex(2, ciArray[i].getId()); // Update fk_id field by first id represented in DB
+                        for (RegAttDB raUpdateDB1 : raUpdateDB) {
+                            raUpdateDB1.setValueByIndex(2, ciArray[i].getId()); // Update fk_id field by first id represented in DB
                         }
-                        RegAttDB.updateRADBToMySQL(raUpdateDB, globalSettings);
-
+                        RegAttDB.updateRADBToMySQL(raUpdateDB);
                     }
                     // Delete dublicated contacts from SQL DB
-                    ContactItem.deleteCIArrayFromDB(ciUpdateArray, globalSettings);
+                    ContactItem.deleteCIArrayFromDB(ciUpdateArray);
 
                     // Delete dublicated contacts from ciArray
                     for(int j = ciI.size()-1; j >= 0; j--){
