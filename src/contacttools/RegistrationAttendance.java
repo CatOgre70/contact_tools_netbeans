@@ -130,8 +130,7 @@ public class RegistrationAttendance extends ContactItem {
                 if(fileContent.charAt(k) == 0x0D){
                     k++; // Excel has two eol characters
                     RegistrationAttendance raItem = new RegistrationAttendance();
-                    // raInputArray = RegistrationAttendance.increaseRAArray(raInputArray);
-
+                    
                     // Parsing current string from Input1 file
                     str = fileContent.substring(startPosition, k-1);
                     int[] semicolonPosition = new int[n - 1];
