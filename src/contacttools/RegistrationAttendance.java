@@ -1,5 +1,6 @@
 package contacttools;
 
+import static contacttools.AppGlobalSettings.maxRegAndAttStrings;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -109,7 +110,7 @@ public class RegistrationAttendance extends ContactItem {
 
         // Read new contacts and registration/attendance data from Input1 file
 
-        ArrayList<RegistrationAttendance> raIA = new ArrayList<>();
+        ArrayList<RegistrationAttendance> raIA = new ArrayList<>(AppGlobalSettings.maxRegAndAttStrings);
         String str;
         String fileContent;
         char[] chars;

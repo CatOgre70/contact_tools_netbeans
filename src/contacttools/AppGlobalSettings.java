@@ -25,6 +25,8 @@ public class AppGlobalSettings {
     public static char excelCSVEol2;
     public static char csvSeparator;
     public static char csvEol;
+    public static int maxRegAndAttStrings;
+    public static int maxContactItemStrings;
 
     AppGlobalSettings(){
         numberOfColumns = 17;
@@ -62,6 +64,9 @@ public class AppGlobalSettings {
         excelCSVEol2 = 0x0A;
         csvSeparator = ',';
         csvEol = 0x0A;
+        maxRegAndAttStrings = 200;
+        maxContactItemStrings = 2500;
+        
     }
 
     void ReadFromCNFfile() {

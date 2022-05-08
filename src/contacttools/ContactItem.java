@@ -226,7 +226,7 @@ public class ContactItem {
     public static ContactItem[] readCIArrayFromDB(AppGlobalSettings globalSettings){
 
         // ArrayList of Contact Item Strings
-        ArrayList<ContactItem> ciA = new ArrayList<>();
+        ArrayList<ContactItem> ciA = new ArrayList<>(AppGlobalSettings.maxContactItemStrings);
 
         // Construct the query for MySQL
         String Query = "select ";
